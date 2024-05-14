@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  app:
+    build: ./infrastructure/php
+    volumes:
+      - ./src:/data
+  web:
+    image: nginx:1.20-alpine
+    ports:
+      - 8080:80
+    volumes:
+      - ./src:/data
+      - ./infrastructure/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    working_dir: /data
+  db:
+    build: ./infrastructure/mysql
+    volumes:
+      - db-store:/var/lib/mysql
+    ports:
+      - 33060:3306
+volumes:
+  db-store:
